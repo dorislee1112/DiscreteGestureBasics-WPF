@@ -54,6 +54,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         private bool isTracked = false;
 
         SoundPlayer sound;
+        SoundPlayer soundleft;
 
         /// <summary>
         /// Initializes a new instance of the GestureResultView class and sets initial property values
@@ -73,6 +74,9 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             sound = new SoundPlayer();
             sound.SoundLocation = "123.wav";
             sound.Load();
+            soundleft = new SoundPlayer();
+            soundleft.SoundLocation = "ray_gun.wav";
+            soundleft.Load();
         }
 
         /// <summary>
@@ -264,29 +268,38 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 this.BodyColor = this.trackedColors[this.BodyIndex];
                 //this.BodyColor = Brushes.Gray;
 
-                if (fProgress > 0.3f)
+                //if (fProgress > 0.75f)
                 //if (this.Detected)
-                {
+               // {
                     // this.Confidence = detectionConfidence;
                     //this.BodyColor = Brushes.White;
-                    sound.Play();
 
-                    
+
+                Console.Write(fProgress + "\n");
                     if (side.Equals("Left_handProgress")){
-                        this.ImageSource = this.LeftHandImage;
-                        Console.Write("left \n");
+                        if (fProgress > 0.7f )
+                        {
+                            this.ImageSource = this.LeftHandImage;
+                            Console.Write("left :"+fProgress+"\n");
+                            soundleft.Play();
+                        }
                     }
-                    if (side.Equals("Right_handProgress")){
-                        this.ImageSource = this.RightHandImage;
-                        Console.Write("right \n");
+                    else if (side.Equals("Right_handProgress")){
+                        if (fProgress > 0.6f )
+                        {
+                            this.ImageSource = this.RightHandImage;
+                            Console.Write("right  :" + fProgress + "\n");
+                            sound.Play();
+                        }
                     }
-                    if (side.Equals("footProgress")) { 
+                    
+                    else if (side.Equals("footProgress")) { 
                         this.ImageSource = this.FootImage;
-                        Console.Write("foot \n");
+                        Console.Write("foot  :" + fProgress + "\n");
                     }
                     
                     
-                }
+                //}
                 else
                 {
                     this.ImageSource = this.seatedImage;

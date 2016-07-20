@@ -219,7 +219,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                         {
                             //if (gesture.Name.Equals(this.right_ProgressGestureName)  && gesture.GestureType == GestureType.Continuous)
                             //if (gesture.Name.Equals(this.left_ProgressGestureName) && gesture.GestureType == GestureType.Continuous)
-                            if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
+ //                           if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
+                            if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) ) && gesture.GestureType == GestureType.Continuous)
                             {
                                 ContinuousGestureResult result = null;
                                 continuousResults.TryGetValue(gesture, out result);
@@ -233,17 +234,6 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                                    // this.GestureResultView.UpdateContinuousGestureResult(true,result.Progress, gesture.Name);
                                 }
                             }
-                            /*if (gesture.Name.Equals(this.left_ProgressGestureName) && gesture.GestureType == GestureType.Continuous)
-                            {
-                                ContinuousGestureResult result = null;
-                                continuousResults.TryGetValue(gesture, out result);
-
-                                if (result != null)
-                                {
-                                    // update the GestureResultView object with new gesture result values
-                                    this.GestureResultView.UpdateContinuousGestureResult(true, result.Progress, gesture.Name);
-                                }
-                            }*/
                         }
                     }
                 }
