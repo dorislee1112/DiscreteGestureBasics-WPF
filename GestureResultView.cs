@@ -59,6 +59,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         public static SoundPlayer soundleft;
         public static WMPLib.WindowsMediaPlayer wplayerhihat;
         public static WMPLib.WindowsMediaPlayer wplayersnare;
+        public static bool doublectrlLeft1 = false;
+        public static bool doublectrlRight1 = false;
 
         /// <summary>
         /// Initializes a new instance of the GestureResultView class and sets initial property values
@@ -292,23 +294,31 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                     if (fProgress > 0.7f)
                     {
                         this.ImageSource = this.LeftHandImage;
-                        Console.Write("left :" + fProgress + "\n");
+                        //Console.Write("left :" + fProgress + "\n");
+                        doublectrlLeft1 = true;
                         signLeft = true;
-                        //soundleft.Play();
                     }
                 }
-                else if (side.Equals("Right_handProgress"))
+                else
+                {
+                    doublectrlLeft1 = false;
+                }
+
+                if (side.Equals("Right_handProgress"))
                 {
                     if (fProgress > 0.6f)
                     {
                         this.ImageSource = this.RightHandImage;
-                        Console.Write("right  :" + fProgress + "\n");
+                      //  Console.Write("right  :" + fProgress + "\n");
                         signRight = true;
-                        //sound.Play();
+                        doublectrlRight1 = true;
                     }
                 }
-
-                else if (side.Equals("footProgress"))
+                else
+                    doublectrlRight1 = false;
+                Console.Write("leftctr1 :" + doublectrlLeft1 + "\n");
+                Console.Write("rightctr1 :" + doublectrlRight1 + "\n");
+                if (side.Equals("footProgress"))
                 {
                     this.ImageSource = this.FootImage;
                     Console.Write("foot  :" + fProgress + "\n");
