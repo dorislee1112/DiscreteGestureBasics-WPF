@@ -50,9 +50,9 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             {
                 throw new ArgumentNullException("gestureResultView");
             }
-            
+
             this.GestureResultView = gestureResultView;
-            
+
             // create the vgb source. The associated body tracking ID will be set when a valid body frame arrives from the sensor.
             this.vgbFrameSource = new VisualGestureBuilderFrameSource(kinectSensor, 0);
             this.vgbFrameSource.TrackingIdLost += this.Source_TrackingIdLost;
@@ -219,8 +219,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                         {
                             //if (gesture.Name.Equals(this.right_ProgressGestureName)  && gesture.GestureType == GestureType.Continuous)
                             //if (gesture.Name.Equals(this.left_ProgressGestureName) && gesture.GestureType == GestureType.Continuous)
- //                           if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
-                            if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) ) && gesture.GestureType == GestureType.Continuous)
+                            //                           if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
+                            if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
                             {
                                 ContinuousGestureResult result = null;
                                 continuousResults.TryGetValue(gesture, out result);
@@ -229,9 +229,11 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
                                 if (result != null)
                                 {
+                                    //skeleton.Joints[JointType.HandRight].Position.X
+
                                     // update the GestureResultView object with new gesture result values
                                     this.GestureResultView.UpdateContinuousGestureResult(true, result.Progress, gesture.Name);
-                                   // this.GestureResultView.UpdateContinuousGestureResult(true,result.Progress, gesture.Name);
+                                    // this.GestureResultView.UpdateContinuousGestureResult(true,result.Progress, gesture.Name);
                                 }
                             }
                         }
@@ -248,7 +250,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         private void Source_TrackingIdLost(object sender, TrackingIdLostEventArgs e)
         {
             // update the GestureResultView object to show the 'Not Tracked' image in the UI
-            this.GestureResultView.UpdateGestureResult(false, false, 0.0f,null);
+            this.GestureResultView.UpdateGestureResult(false, false, 0.0f, null);
             this.GestureResultView.UpdateContinuousGestureResult(false, 0.0f, null);
         }
     }

@@ -12,7 +12,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Media;
-
+   
     /// <summary>
     /// Stores discrete gesture results for the GestureDetector.
     /// Properties are stored/updated for display in the UI.
@@ -49,12 +49,16 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
         /// <summary> Image to display in UI which corresponds to tracking/detection state </summary>
         private ImageSource imageSource = null;
-        
+
         /// <summary> True, if the body is currently being tracked </summary>
         private bool isTracked = false;
 
-        SoundPlayer sound;
-        SoundPlayer soundleft;
+        public static bool signLeft = false;
+        public static bool signRight = false;
+        public static SoundPlayer sound;
+        public static SoundPlayer soundleft;
+        public static WMPLib.WindowsMediaPlayer wplayerhihat;
+        public static WMPLib.WindowsMediaPlayer wplayersnare;
 
         /// <summary>
         /// Initializes a new instance of the GestureResultView class and sets initial property values
@@ -70,13 +74,20 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             this.Detected = detected;
             this.Confidence = confidence;
             this.ImageSource = this.notTrackedImage;
-
+            /*
             sound = new SoundPlayer();
-            sound.SoundLocation = "123.wav";
+            sound.SoundLocation = "7788.wav";
             sound.Load();
             soundleft = new SoundPlayer();
-            soundleft.SoundLocation = "ray_gun.wav";
+            soundleft.SoundLocation = "snare.wav";
             soundleft.Load();
+            */
+          
+            wplayerhihat = new WMPLib.WindowsMediaPlayer();
+            wplayerhihat.URL = @"22050-32.mp3";
+            wplayersnare = new WMPLib.WindowsMediaPlayer();
+            wplayersnare.URL = @"1600-40-snare.mp3";
+
         }
 
         /// <summary>
@@ -127,7 +138,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// <summary> 
         /// Gets a value indicating whether or not the body associated with the gesture detector is currently being tracked 
         /// </summary>
-        public bool IsTracked 
+        public bool IsTracked
         {
             get
             {
@@ -147,7 +158,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// <summary> 
         /// Gets a value indicating whether or not the discrete gesture has been detected
         /// </summary>
-        public bool Detected 
+        public bool Detected
         {
             get
             {
@@ -230,17 +241,17 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 {
                     this.Confidence = detectionConfidence;
                     //this.ImageSource = this.seatedImage;
-                    
+
                     sound.Play();
-                    
-                    Console.Write(side+"\n");
+
+                    Console.Write(side + "\n");
                     if (side.Equals("Left_hand"))
                         this.ImageSource = this.LeftHandImage;
                     if (side.Equals("Right_hand"))
                         this.ImageSource = this.RightHandImage;
                     if (side.Equals("foot"))
                         this.ImageSource = this.FootImage;
-                    
+
                     //sound.Play();
                 }
                 else
@@ -251,7 +262,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         }
 
         public void UpdateContinuousGestureResult(bool isBodyTrackingIdValid, float fProgress, String side)
-       // public void UpdateContinuousGestureResult(bool isBodyTrackingIdValid, bool isGestureDetected, String side)
+        // public void UpdateContinuousGestureResult(bool isBodyTrackingIdValid, bool isGestureDetected, String side)
         {
             this.IsTracked = isBodyTrackingIdValid;
             //this.fProgress = 0.0f;
@@ -270,43 +281,48 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
                 //if (fProgress > 0.75f)
                 //if (this.Detected)
-               // {
-                    // this.Confidence = detectionConfidence;
-                    //this.BodyColor = Brushes.White;
+                // {
+                // this.Confidence = detectionConfidence;
+                //this.BodyColor = Brushes.White;
 
 
-                Console.Write(fProgress + "\n");
-                    if (side.Equals("Left_handProgress")){
-                        if (fProgress > 0.7f )
-                        {
-                            this.ImageSource = this.LeftHandImage;
-                            Console.Write("left :"+fProgress+"\n");
-                            soundleft.Play();
-                        }
+                //Console.Write(fProgress + "\n");
+                if (side.Equals("Left_handProgress"))
+                {
+                    if (fProgress > 0.7f)
+                    {
+                        this.ImageSource = this.LeftHandImage;
+                        Console.Write("left :" + fProgress + "\n");
+                        signLeft = true;
+                        //soundleft.Play();
                     }
-                    else if (side.Equals("Right_handProgress")){
-                        if (fProgress > 0.6f )
-                        {
-                            this.ImageSource = this.RightHandImage;
-                            Console.Write("right  :" + fProgress + "\n");
-                            sound.Play();
-                        }
+                }
+                else if (side.Equals("Right_handProgress"))
+                {
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.RightHandImage;
+                        Console.Write("right  :" + fProgress + "\n");
+                        signRight = true;
+                        //sound.Play();
                     }
-                    
-                    else if (side.Equals("footProgress")) { 
-                        this.ImageSource = this.FootImage;
-                        Console.Write("foot  :" + fProgress + "\n");
-                    }
-                    
-                    
-                //}
+                }
+
+                else if (side.Equals("footProgress"))
+                {
+                    this.ImageSource = this.FootImage;
+                    Console.Write("foot  :" + fProgress + "\n");
+                }
+
+
+            //}
                 else
                 {
                     this.ImageSource = this.seatedImage;
                 }
             }
         }
-        
+
 
         /// <summary>
         /// Notifies UI that a property has changed

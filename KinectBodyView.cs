@@ -57,6 +57,10 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// </summary>
         private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
 
+        private readonly Brush rect1Brush = new SolidColorBrush(Color.FromArgb(128, 0, 255, 255));
+        private readonly Brush rect2Brush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 128));
+        private readonly Brush rectknock = new SolidColorBrush(Color.FromArgb(128, 255, 255,255));
+
         /// <summary>
         /// Brush used for drawing joints that are currently inferred
         /// </summary>        
@@ -188,6 +192,10 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             }
         }
 
+        double lastY_left=0;
+        double lastY_right=0;
+
+
         /// <summary>
         /// Updates the body array with new information from the sensor
         /// Should be called whenever a new BodyFrameArrivedEvent occurs
@@ -201,6 +209,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 {
                     // Draw a transparent background to set the render size
                     dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                    
 
                     int penIndex = 0;
                     foreach (Body body in bodies)
@@ -230,10 +239,37 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            this.DrawBody(joints, jointPoints, dc, drawPen);
+                            this.DrawBody(body,joints, jointPoints, dc, drawPen);
 
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+                            dc.DrawRectangle(this.rect1Brush, null, new Rect(jointPoints[JointType.SpineMid].X + 80, jointPoints[JointType.SpineMid].Y - 90, 90,90));
+                            dc.DrawRectangle(this.rect2Brush, null, new Rect(jointPoints[JointType.SpineMid].X - 160, jointPoints[JointType.SpineMid].Y - 90, 90,90));
+                            double leftX = jointPoints[JointType.SpineMid].X - 160;
+                            double leftY = jointPoints[JointType.SpineMid].Y - 90;
+                            double rightX = jointPoints[JointType.SpineMid].X + 80;
+                            double rightY = jointPoints[JointType.SpineMid].Y - 90;
+
+                            
+                            //Console.Write(GestureResultView.signLeft + "X: " + leftX + " " + jointPoints[JointType.HandLeft].X + " Y: " + leftY + " " + jointPoints[JointType.HandLeft].Y);
+                            if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y > lastY_left)
+                            {
+                               // GestureResultView.soundleft.Play();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(jointPoints[JointType.SpineMid].X - 160, jointPoints[JointType.SpineMid].Y - 90,90,90));
+                                GestureResultView.signLeft = false;
+                                GestureResultView.wplayerhihat.controls.play();
+                            }
+                            Console.Write(GestureResultView.signRight);
+                            if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y>lastY_right)
+                            {
+                              //  GestureResultView.sound.Play();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(jointPoints[JointType.SpineMid].X + 80, jointPoints[JointType.SpineMid].Y - 90, 90, 90));
+                                GestureResultView.wplayersnare.controls.play();
+                                GestureResultView.signRight = false;
+                            }
+
+                            lastY_left = jointPoints[JointType.HandTipLeft].Y;
+                            lastY_right=jointPoints[JointType.HandTipRight].Y;
                         }
                     }
 
@@ -250,7 +286,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         /// <param name="jointPoints">translated positions of joints to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
         /// <param name="drawingPen">specifies color to draw a specific body</param>
-        private void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, DrawingContext drawingContext, Pen drawingPen)
+        private void DrawBody(Body body,IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, DrawingContext drawingContext, Pen drawingPen)
         {
             // Draw the bones
             foreach (var bone in this.bones)
@@ -278,7 +314,12 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 {
                     drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], JointThickness, JointThickness);
                 }
+
+
             }
+            //Draw Rectangle
+            //drawingContext.DrawRectangle(this.rect1Brush, null, new Rect(body.Joints[JointType.SpineMid].Position.X + 50, body.Joints[JointType.SpineMid].Position.Y + 50, 30, 30));
+           // Console.Write("X: " + body.Joints[JointType.SpineMid].Position.X + " Y: " + body.Joints[JointType.SpineMid].Position.Y);
         }
 
         /// <summary>
@@ -310,6 +351,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             }
 
             drawingContext.DrawLine(drawPen, jointPoints[jointType0], jointPoints[jointType1]);
+           
+           
         }
 
         /// <summary>

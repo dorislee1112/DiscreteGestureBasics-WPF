@@ -38,3 +38,6 @@ C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\Microsoft.S
 C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.csproj.GenerateResource.Cache
 C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.exe
 C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.pdb
+C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\Interop.MediaPlayer.dll
+C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\Interop.WMPLib.dll
+C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.csproj.ResolveComReference.cache
