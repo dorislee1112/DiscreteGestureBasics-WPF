@@ -62,6 +62,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
         private readonly Brush rect1Brush = new SolidColorBrush(Color.FromArgb(128, 0, 255, 255));
         private readonly Brush rect2Brush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 128));
+        private readonly Brush rect3Brush = new SolidColorBrush(Color.FromArgb(128, 255, 129, 66));
+        private readonly Brush rect4Brush = new SolidColorBrush(Color.FromArgb(128, 255, 231, 112));
         private readonly Brush rectknock = new SolidColorBrush(Color.FromArgb(128, 255, 255,255));
 
         /// <summary>
@@ -197,6 +199,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
         double lastY_left=0;
         double lastY_right=0;
+        double lastZ_left = 0;
+        double lastZ_right = 0;
 
 
         /// <summary>
@@ -246,12 +250,20 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
-                            dc.DrawRectangle(this.rect1Brush, null, new Rect(jointPoints[JointType.SpineMid].X + 80, jointPoints[JointType.SpineMid].Y - 90, 80,80));
-                            dc.DrawRectangle(this.rect2Brush, null, new Rect(jointPoints[JointType.SpineMid].X - 160, jointPoints[JointType.SpineMid].Y - 90, 80,80));
+                            
                             double leftX = jointPoints[JointType.SpineMid].X - 160;
-                            double leftY = jointPoints[JointType.SpineMid].Y - 90;
+                            double leftY = jointPoints[JointType.SpineMid].Y - 35;
                             double rightX = jointPoints[JointType.SpineMid].X + 80;
-                            double rightY = jointPoints[JointType.SpineMid].Y - 90;
+                            double rightY = jointPoints[JointType.SpineMid].Y - 35;
+                            double left_topX = jointPoints[JointType.SpineMid].X - 120;
+                            double left_topY = jointPoints[JointType.SpineMid].Y - 155;
+                            double right_topX = jointPoints[JointType.SpineMid].X + 40;
+                            double right_topY = jointPoints[JointType.SpineMid].Y - 155;
+
+                            dc.DrawRectangle(this.rect1Brush, null, new Rect(rightX, rightY, 90, 90));
+                            dc.DrawRectangle(this.rect2Brush, null, new Rect(leftX, leftY, 90, 90));
+                            dc.DrawRectangle(this.rect3Brush, null, new Rect(right_topX, right_topY, 90, 90));
+                            dc.DrawRectangle(this.rect4Brush, null, new Rect(left_topX, left_topY, 90, 90));
 
                             Console.Write("leftctr2 :" + doublectrlLeft2 + "\n");
                             Console.Write("rightctr2 :" + doublectrlRight2 + "\n");
@@ -259,7 +271,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                             if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y-lastY_left >10 )
                             //if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.doublectrlLeft1==true &&doublectrlLeft2 ==true  && jointPoints[JointType.HandTipLeft].Y > lastY_left)
                             {                               
-                                dc.DrawRectangle(this.rectknock, null, new Rect(jointPoints[JointType.SpineMid].X - 160, jointPoints[JointType.SpineMid].Y - 90,80,80));
+                                dc.DrawRectangle(this.rectknock, null, new Rect(leftX, leftY,80,80));
                                 GestureResultView.wplayerhihat.controls.play();
                                 GestureResultView.signLeft = false;
                                 doublectrlLeft2 = false;
@@ -269,11 +281,31 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                             if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y-lastY_right>10)
                             //if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.doublectrlRight1==true && doublectrlRight2 == true && jointPoints[JointType.HandTipRight].Y > lastY_right)
                             {
-                                dc.DrawRectangle(this.rectknock, null, new Rect(jointPoints[JointType.SpineMid].X + 80, jointPoints[JointType.SpineMid].Y - 90, 80, 80));
+                                dc.DrawRectangle(this.rectknock, null, new Rect(rightX, leftY, 80, 80));
                                 GestureResultView.wplayersnare.controls.play();
                                 GestureResultView.signRight = false;
                                 doublectrlRight2 = false;
                             }
+
+                            if (jointPoints[JointType.HandTipLeft].X > left_topX && jointPoints[JointType.HandTipLeft].X < left_topX + 90 && jointPoints[JointType.HandTipLeft].Y > left_topY && jointPoints[JointType.HandTipLeft].Y < left_topY + 90 && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y - lastY_left > 5 && lastZ_left-body.Joints[JointType.HandTipLeft].Position.Z > 10)
+                            //if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.doublectrlLeft1==true &&doublectrlLeft2 ==true  && jointPoints[JointType.HandTipLeft].Y > lastY_left)
+                            {
+                                dc.DrawRectangle(this.rectknock, null, new Rect(left_topX, left_topY, 80, 80));
+                                GestureResultView.wplayercrash.controls.play();
+                                GestureResultView.signLeft = false;
+                                doublectrlLeft2 = false;
+
+                            }
+                            //Console.Write(GestureResultView.signRight);
+                            if (jointPoints[JointType.HandTipRight].X > right_topX && jointPoints[JointType.HandTipRight].X < right_topX + 90 && jointPoints[JointType.HandTipRight].Y > right_topY && jointPoints[JointType.HandTipRight].Y < right_topY + 90 && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y - lastY_right > 3)// && lastZ_right-body.Joints[JointType.HandTipRight].Position.Z > 5)
+                            //if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.doublectrlRight1==true && doublectrlRight2 == true && jointPoints[JointType.HandTipRight].Y > lastY_right)
+                            {
+                                dc.DrawRectangle(this.rectknock, null, new Rect(right_topX, right_topY, 80, 80));
+                                GestureResultView.wplayerkick.controls.play();
+                                GestureResultView.signRight = false;
+                                doublectrlRight2 = false;
+                            }
+
                             if (GestureResultView.doublectrlLeft1 == false) {
                                 doublectrlLeft2 = true;
                             }
@@ -282,6 +314,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                             }
                             lastY_left = jointPoints[JointType.HandTipLeft].Y;
                             lastY_right=jointPoints[JointType.HandTipRight].Y;
+                            lastZ_left = jointPoints[JointType.HandTipLeft].Y;
+                            lastZ_right = jointPoints[JointType.HandTipRight].Y;
                         }
                     }
 

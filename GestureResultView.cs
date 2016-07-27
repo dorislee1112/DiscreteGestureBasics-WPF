@@ -59,6 +59,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         public static SoundPlayer soundleft;
         public static WMPLib.WindowsMediaPlayer wplayerhihat;
         public static WMPLib.WindowsMediaPlayer wplayersnare;
+        public static WMPLib.WindowsMediaPlayer wplayerkick;
+        public static WMPLib.WindowsMediaPlayer wplayercrash;
         public static bool doublectrlLeft1 = false;
         public static bool doublectrlRight1 = false;
 
@@ -89,6 +91,10 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             wplayerhihat.URL = @"22050-32.mp3";
             wplayersnare = new WMPLib.WindowsMediaPlayer();
             wplayersnare.URL = @"1600-40-snare.mp3";
+            wplayercrash = new WMPLib.WindowsMediaPlayer();
+            wplayercrash.URL = @"crash-1.mp3";
+            wplayerkick = new WMPLib.WindowsMediaPlayer();
+            wplayerkick.URL = @"kick-1.mp3";
 
         }
 
