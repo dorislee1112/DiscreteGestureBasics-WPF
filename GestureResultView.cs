@@ -55,10 +55,12 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
         public static bool signLeft = false;
         public static bool signRight = false;
+        public static bool signFoot = false;
         public static SoundPlayer sound;
         public static SoundPlayer soundleft;
         public static WMPLib.WindowsMediaPlayer wplayerhihat;
         public static WMPLib.WindowsMediaPlayer wplayersnare;
+        public static WMPLib.WindowsMediaPlayer wplayerride;
         public static WMPLib.WindowsMediaPlayer wplayerkick;
         public static WMPLib.WindowsMediaPlayer wplayercrash;
         public static bool doublectrlLeft1 = false;
@@ -93,6 +95,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             wplayersnare.URL = @"1600-40-snare.mp3";
             wplayercrash = new WMPLib.WindowsMediaPlayer();
             wplayercrash.URL = @"crash-1.mp3";
+            wplayerride = new WMPLib.WindowsMediaPlayer();
+            wplayerride.URL = @"ride.mp3";
             wplayerkick = new WMPLib.WindowsMediaPlayer();
             wplayerkick.URL = @"kick-1.mp3";
 
@@ -295,42 +299,96 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
 
 
                 //Console.Write(fProgress + "\n");
-                if (side.Equals("Left_handProgress"))
+
+                if (side.Equals("footProgress"))
                 {
-                    if (fProgress > 0.7f)
-                    {
-                        this.ImageSource = this.LeftHandImage;
-                        //Console.Write("left :" + fProgress + "\n");
-                        doublectrlLeft1 = true;
-                        signLeft = true;
-                    }
-                }
-                else
-                {
-                    doublectrlLeft1 = false;
+                    this.ImageSource = this.FootImage;
+                    signFoot = true;
+             //       Console.Write("foot  :" + fProgress + "\n");
                 }
 
-                if (side.Equals("Right_handProgress"))
+                if (side.Equals("rideProgress_Right"))
+                {
+                    if (fProgress > 0.5f)
+                    {
+                        this.ImageSource = this.RightHandImage;
+                        //  Console.Write("right  :" + fProgress + "\n");
+                        signRight = true;
+                        //wplayerkick.controls.play();
+                        doublectrlRight1 = true;
+                    }
+                }
+                if (side.Equals("hihatProgress_Right"))
                 {
                     if (fProgress > 0.6f)
                     {
                         this.ImageSource = this.RightHandImage;
-                      //  Console.Write("right  :" + fProgress + "\n");
                         signRight = true;
                         doublectrlRight1 = true;
                     }
                 }
-                else
-                    doublectrlRight1 = false;
-                Console.Write("leftctr1 :" + doublectrlLeft1 + "\n");
-                Console.Write("rightctr1 :" + doublectrlRight1 + "\n");
-                if (side.Equals("footProgress"))
+
+                if (side.Equals("hihatProgress_Left"))
                 {
-                    this.ImageSource = this.FootImage;
-                    Console.Write("foot  :" + fProgress + "\n");
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.LeftHandImage;
+                        signLeft = true;
+                        doublectrlLeft1 = true;
+                    }
+                }
+                if (side.Equals("snareProgress_Right"))
+                {
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.RightHandImage;
+                        //  Console.Write("right  :" + fProgress + "\n");
+                        signRight = true;
+                        doublectrlRight1 = true;
+                    }
+                }
+                if (side.Equals("snareProgress_Right"))
+                {
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.RightHandImage;
+                        //  Console.Write("right  :" + fProgress + "\n");
+                        signRight = true;
+                        doublectrlRight1 = true;
+                    }
                 }
 
+                if (side.Equals("snareProgress_Left"))
+                {
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.LeftHandImage;
+                        //  Console.Write("right  :" + fProgress + "\n");
+                        signLeft = true;
+                        doublectrlLeft1 = true;
+                    }
+                }
+                if (side.Equals("crashProgress_Right"))
+                {
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.RightHandImage;
+                        //  Console.Write("right  :" + fProgress + "\n");
+                        signRight = true;
+                        doublectrlRight1 = true;
+                    }
+                }
 
+                if (side.Equals("crashProgress_Left"))
+                {
+                    if (fProgress > 0.6f)
+                    {
+                        this.ImageSource = this.LeftHandImage;
+                        //  Console.Write("right  :" + fProgress + "\n");
+                        signLeft = true;
+                        doublectrlLeft1 = true;
+                    }
+                }
             //}
                 else
                 {

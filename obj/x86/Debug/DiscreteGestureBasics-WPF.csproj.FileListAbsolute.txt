@@ -41,3 +41,4 @@ C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGes
 C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\Interop.MediaPlayer.dll
 C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\Interop.WMPLib.dll
 C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\obj\x86\Debug\DiscreteGestureBasics-WPF.csproj.ResolveComReference.cache
+C:\Users\Stacey\Desktop\drum\DiscreteGestureBasics-WPF\bin\x86\Debug\Database\drum.gbd

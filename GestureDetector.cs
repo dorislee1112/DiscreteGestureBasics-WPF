@@ -18,15 +18,24 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
     public class GestureDetector : IDisposable
     {
         /// <summary> Path to the gesture database that was trained with VGB </summary>
-        private readonly string gestureDatabase = @"Database\test.gbd";
+        //private readonly string gestureDatabase = @"Database\test.gbd";
+        private readonly string gestureDatabase = @"Database\drum.gbd";
 
         /// <summary> Name of the discrete gesture in the database that we want to track </summary>
-        private readonly string rightGestureName = "Right_hand";
-        private readonly string leftGestureName = "Left_hand";
-        private readonly string footGestureName = "foot";
+        
         private readonly string foot_ProgressGestureName = "footProgress";
-        private readonly string right_ProgressGestureName = "Right_handProgress";
-        private readonly string left_ProgressGestureName = "Left_handProgress";
+
+        private readonly string snareRGestureName = "snareProgress_Right";
+        private readonly string snareLGestureName = "snareProgress_Left";
+
+        private readonly string hihatRGestureName = "hihatProgress_Right";
+        private readonly string hihatLGestureName = "hihatProgress_Left";
+        
+        private readonly string rideGestureName = "rideProgress_Right";
+
+        private readonly string crashLGestureName = "crashProgress_Left";
+        private readonly string crashRGestureName = "crashProgress_Right";
+
         //private readonly string feetGestureName = "Right_hand";
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
@@ -73,11 +82,11 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                 foreach (Gesture gesture in database.AvailableGestures)
                 {
 
-                    //Console.Write(gesture.Name + "\n");
+                    Console.Write("XXXXXXXXX " + gesture.Name + "\n");
 
                     //if (gesture.Name.Equals(this.rightGestureName) || gesture.Name.Equals(this.right_ProgressGestureName))
                     //if (gesture.Name.Equals(this.leftGestureName) ||gesture.Name.Equals(this.left_ProgressGestureName))
-                    if (gesture.Name.Equals(this.rightGestureName) || gesture.Name.Equals(this.leftGestureName) || gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName) || gesture.Name.Equals(this.footGestureName))
+                    if ( gesture.Name.Equals(this.snareRGestureName) || gesture.Name.Equals(this.snareLGestureName) || gesture.Name.Equals(this.crashLGestureName) || gesture.Name.Equals(this.crashRGestureName)  ||  gesture.Name.Equals(this.foot_ProgressGestureName) ||  gesture.Name.Equals(this.rideGestureName) || gesture.Name.Equals(this.hihatRGestureName) || gesture.Name.Equals(this.hihatLGestureName))
                     //if (gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName))
                     //if (gesture.Name.Equals(this.left_ProgressGestureName))
                     {
@@ -220,7 +229,7 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                             //if (gesture.Name.Equals(this.right_ProgressGestureName)  && gesture.GestureType == GestureType.Continuous)
                             //if (gesture.Name.Equals(this.left_ProgressGestureName) && gesture.GestureType == GestureType.Continuous)
                             //                           if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
-                            if ((gesture.Name.Equals(this.right_ProgressGestureName) || gesture.Name.Equals(this.left_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
+                            if ((gesture.Name.Equals(this.snareRGestureName) || gesture.Name.Equals(this.snareLGestureName) || gesture.Name.Equals(this.crashLGestureName) || gesture.Name.Equals(this.crashRGestureName) || gesture.Name.Equals(this.rideGestureName) || gesture.Name.Equals(this.hihatRGestureName) || gesture.Name.Equals(this.hihatLGestureName) || gesture.Name.Equals(this.foot_ProgressGestureName)) && gesture.GestureType == GestureType.Continuous)
                             {
                                 ContinuousGestureResult result = null;
                                 continuousResults.TryGetValue(gesture, out result);

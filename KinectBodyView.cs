@@ -136,14 +136,14 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
             this.bones = new List<Tuple<JointType, JointType>>();
 
             // Torso
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
             this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
+            //this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
 
             // Right Arm
             this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
@@ -201,7 +201,9 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
         double lastY_right=0;
         double lastZ_left = 0;
         double lastZ_right = 0;
+        double lastY_foot = 0;
 
+        bool snareRctrl = false;
 
         /// <summary>
         /// Updates the body array with new information from the sensor
@@ -251,59 +253,151 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
                             
-                            double leftX = jointPoints[JointType.SpineMid].X - 160;
-                            double leftY = jointPoints[JointType.SpineMid].Y - 35;
-                            double rightX = jointPoints[JointType.SpineMid].X + 80;
-                            double rightY = jointPoints[JointType.SpineMid].Y - 35;
-                            double left_topX = jointPoints[JointType.SpineMid].X - 120;
-                            double left_topY = jointPoints[JointType.SpineMid].Y - 155;
-                            double right_topX = jointPoints[JointType.SpineMid].X + 40;
-                            double right_topY = jointPoints[JointType.SpineMid].Y - 155;
+                            double hihatX = jointPoints[JointType.SpineMid].X -160;
+                            double hihatY = jointPoints[JointType.SpineMid].Y -80;
+                            double snareX = jointPoints[JointType.SpineMid].X - 40;
+                            double snareY = jointPoints[JointType.SpineMid].Y ;
+                            double crashX = jointPoints[JointType.SpineMid].X - 110;
+                            double crashY = jointPoints[JointType.SpineMid].Y - 180;
+                            double rideX = jointPoints[JointType.SpineMid].X + 120;
+                            double rideY = jointPoints[JointType.SpineMid].Y -35;
+                            double boardsize = 80;
 
-                            dc.DrawRectangle(this.rect1Brush, null, new Rect(rightX, rightY, 90, 90));
-                            dc.DrawRectangle(this.rect2Brush, null, new Rect(leftX, leftY, 90, 90));
-                            dc.DrawRectangle(this.rect3Brush, null, new Rect(right_topX, right_topY, 90, 90));
-                            dc.DrawRectangle(this.rect4Brush, null, new Rect(left_topX, left_topY, 90, 90));
+                            dc.DrawRectangle(this.rect1Brush, null, new Rect(snareX, snareY, boardsize, boardsize));
+                            dc.DrawRectangle(this.rect2Brush, null, new Rect(hihatX, hihatY, boardsize, boardsize));
+                            dc.DrawRectangle(this.rect3Brush, null, new Rect(rideX, rideY, boardsize, boardsize));
+                            dc.DrawRectangle(this.rect4Brush, null, new Rect(crashX, crashY, boardsize, boardsize));
 
-                            Console.Write("leftctr2 :" + doublectrlLeft2 + "\n");
-                            Console.Write("rightctr2 :" + doublectrlRight2 + "\n");
-                            //Console.Write(GestureResultView.signLeft + "X: " + leftX + " " + jointPoints[JointType.HandLeft].X + " Y: " + leftY + " " + jointPoints[JointType.HandLeft].Y);
-                            if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y-lastY_left >10 )
+                            ///////////////////////////
+                            //右手打hihat
+                            ///////////////////////////
+                            if (jointPoints[JointType.HandTipRight].X > hihatX && jointPoints[JointType.HandTipRight].X < hihatX + boardsize
+                                && jointPoints[JointType.HandTipRight].Y > hihatY && jointPoints[JointType.HandTipRight].Y < hihatY + boardsize
+                                && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y - lastY_right >3)
                             //if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.doublectrlLeft1==true &&doublectrlLeft2 ==true  && jointPoints[JointType.HandTipLeft].Y > lastY_left)
-                            {                               
-                                dc.DrawRectangle(this.rectknock, null, new Rect(leftX, leftY,80,80));
+                            {
+                                //GestureResultView.wplayerhihat.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(hihatX, hihatY, boardsize, boardsize));
+                                GestureResultView.wplayerhihat.controls.play();
+                                GestureResultView.signRight = false;
+                                doublectrlRight2 = false;
+                                
+                            }
+
+                            ///////////////////////////
+                            //左手打hihat
+                            ///////////////////////////
+                            if (jointPoints[JointType.HandTipLeft].X > hihatX && jointPoints[JointType.HandTipLeft].X < hihatX + boardsize
+                               && jointPoints[JointType.HandTipLeft].Y > hihatY && jointPoints[JointType.HandTipLeft].Y < hihatY + boardsize
+                               && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y - lastY_left >3)
+                            //if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.doublectrlLeft1==true &&doublectrlLeft2 ==true  && jointPoints[JointType.HandTipLeft].Y > lastY_left)
+                            {
+                                //MusicStop();
+                                //GestureResultView.wplayerhihat.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(hihatX, hihatY, boardsize, boardsize));
                                 GestureResultView.wplayerhihat.controls.play();
                                 GestureResultView.signLeft = false;
                                 doublectrlLeft2 = false;
-                                
+
                             }
-                            //Console.Write(GestureResultView.signRight);
-                            if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y-lastY_right>10)
+
+
+                            ///////////////////////////
+                            //右手打snare
+                            ///////////////////////////
+
+                            if (jointPoints[JointType.HandTipRight].X > snareX && jointPoints[JointType.HandTipRight].X < snareX + boardsize
+                                && jointPoints[JointType.HandTipRight].Y > snareY && jointPoints[JointType.HandTipRight].Y < snareY + boardsize 
+                                && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y - lastY_right > 15)
                             //if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.doublectrlRight1==true && doublectrlRight2 == true && jointPoints[JointType.HandTipRight].Y > lastY_right)
                             {
-                                dc.DrawRectangle(this.rectknock, null, new Rect(rightX, leftY, 80, 80));
+                                //MusicStop();
+                                GestureResultView.wplayersnare.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(snareX, snareY, boardsize, boardsize));
                                 GestureResultView.wplayersnare.controls.play();
                                 GestureResultView.signRight = false;
                                 doublectrlRight2 = false;
                             }
 
-                            if (jointPoints[JointType.HandTipLeft].X > left_topX && jointPoints[JointType.HandTipLeft].X < left_topX + 90 && jointPoints[JointType.HandTipLeft].Y > left_topY && jointPoints[JointType.HandTipLeft].Y < left_topY + 90 && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y - lastY_left > 5 && lastZ_left-body.Joints[JointType.HandTipLeft].Position.Z > 10)
+                            /////////////////////////
+                            //左手打snare
+                            /////////////////////////
+
+                            if (jointPoints[JointType.HandTipLeft].X > snareX && jointPoints[JointType.HandTipLeft].X < snareX + boardsize
+                                && jointPoints[JointType.HandTipLeft].Y > snareY && jointPoints[JointType.HandTipLeft].Y < snareY + boardsize
+                                && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y - lastY_left > 15)
+                            {
+                                //MusicStop();
+                                GestureResultView.wplayersnare.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(snareX, snareY, boardsize, boardsize));
+                                GestureResultView.wplayersnare.controls.play();
+                                GestureResultView.signLeft = false;
+                                doublectrlLeft2 = false;
+                            }
+
+                            ///////////////////
+                            //右手打crash
+                            ///////////////////
+                            if (jointPoints[JointType.HandTipRight].X > crashX && jointPoints[JointType.HandTipRight].X < crashX + boardsize
+                                && jointPoints[JointType.HandTipRight].Y > crashY && jointPoints[JointType.HandTipRight].Y < crashY + boardsize
+                                && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y - lastY_right > 5
+                                && lastZ_right - body.Joints[JointType.HandTipRight].Position.Z > 0)
                             //if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.doublectrlLeft1==true &&doublectrlLeft2 ==true  && jointPoints[JointType.HandTipLeft].Y > lastY_left)
                             {
-                                dc.DrawRectangle(this.rectknock, null, new Rect(left_topX, left_topY, 80, 80));
+                                //MusicStop();
+                                GestureResultView.wplayercrash.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(crashX, crashY, boardsize, boardsize));
+                                GestureResultView.wplayercrash.controls.play();
+                                GestureResultView.signRight = false;
+                                doublectrlLeft2 = false;
+
+                            }
+
+                            ///////////////////
+                            //左手打crash
+                            ///////////////////
+                            if (jointPoints[JointType.HandTipLeft].X > crashX && jointPoints[JointType.HandTipLeft].X < crashX + boardsize
+                                && jointPoints[JointType.HandTipLeft].Y > crashY && jointPoints[JointType.HandTipLeft].Y < crashY + boardsize
+                                && GestureResultView.signLeft == true && jointPoints[JointType.HandTipLeft].Y - lastY_left > 5 
+                                && lastZ_left - body.Joints[JointType.HandTipLeft].Position.Z > 0)
+                            //if (jointPoints[JointType.HandTipLeft].X > leftX && jointPoints[JointType.HandTipLeft].X < leftX + 90 && jointPoints[JointType.HandTipLeft].Y > leftY && jointPoints[JointType.HandTipLeft].Y < leftY + 90 && GestureResultView.doublectrlLeft1==true &&doublectrlLeft2 ==true  && jointPoints[JointType.HandTipLeft].Y > lastY_left)
+                            {
+                                //MusicStop();
+                                GestureResultView.wplayercrash.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(crashX, crashY, boardsize, boardsize));
                                 GestureResultView.wplayercrash.controls.play();
                                 GestureResultView.signLeft = false;
                                 doublectrlLeft2 = false;
 
                             }
-                            //Console.Write(GestureResultView.signRight);
-                            if (jointPoints[JointType.HandTipRight].X > right_topX && jointPoints[JointType.HandTipRight].X < right_topX + 90 && jointPoints[JointType.HandTipRight].Y > right_topY && jointPoints[JointType.HandTipRight].Y < right_topY + 90 && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y - lastY_right > 3)// && lastZ_right-body.Joints[JointType.HandTipRight].Position.Z > 5)
+
+                            ///////////////////
+                            //右手打ride
+                            ///////////////////
+                            
+                            if (jointPoints[JointType.HandTipRight].X > rideX && jointPoints[JointType.HandTipRight].X < rideX + boardsize
+                                && jointPoints[JointType.HandTipRight].Y > rideY && jointPoints[JointType.HandTipRight].Y < rideY + boardsize
+                                && GestureResultView.signRight == true && jointPoints[JointType.HandTipRight].Y - lastY_right > 5 /*|| body.Joints[JointType.HandTipRight].Position.Z > lastZ_right)*/)// && lastZ_right-body.Joints[JointType.HandTipRight].Position.Z > 5)
                             //if (jointPoints[JointType.HandTipRight].X > rightX && jointPoints[JointType.HandTipRight].X < rightX + 90 && jointPoints[JointType.HandTipRight].Y > rightY && jointPoints[JointType.HandTipRight].Y < rightY + 90 && GestureResultView.doublectrlRight1==true && doublectrlRight2 == true && jointPoints[JointType.HandTipRight].Y > lastY_right)
                             {
-                                dc.DrawRectangle(this.rectknock, null, new Rect(right_topX, right_topY, 80, 80));
-                                GestureResultView.wplayerkick.controls.play();
+                                //MusicStop();
+                                GestureResultView.wplayerride.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(rideX, rideY, boardsize, boardsize));
+                                GestureResultView.wplayerride.controls.play();
                                 GestureResultView.signRight = false;
                                 doublectrlRight2 = false;
+                            }
+
+                            ///////////////////
+                            //腳
+                            ///////////////////
+                            //if (GestureResultView.signFoot == true && jointPoints[JointType.FootRight].Y-lastY_foot>7)
+                            if (GestureResultView.signFoot == true && jointPoints[JointType.AnkleRight].Y - lastY_foot > 5)
+                            {
+                                GestureResultView.wplayerkick.controls.stop();
+                                dc.DrawRectangle(this.rectknock, null, new Rect(jointPoints[JointType.FootRight].X - 15, jointPoints[JointType.FootRight].Y - 15, 30, 30));
+                                GestureResultView.wplayerkick.controls.play();
+                                GestureResultView.signFoot = false;
                             }
 
                             if (GestureResultView.doublectrlLeft1 == false) {
@@ -316,6 +410,8 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                             lastY_right=jointPoints[JointType.HandTipRight].Y;
                             lastZ_left = jointPoints[JointType.HandTipLeft].Y;
                             lastZ_right = jointPoints[JointType.HandTipRight].Y;
+                            //lastY_foot = jointPoints[JointType.FootRight].Y;
+                            lastY_foot = jointPoints[JointType.AnkleRight].Y;
                         }
                     }
 
@@ -323,6 +419,15 @@ namespace Microsoft.Samples.Kinect.DiscreteGestureBasics
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
             }
+        }
+
+
+        private void MusicStop()
+        {
+            //GestureResultView.wplayerkick.controls.stop();
+            //GestureResultView.wplayercrash.controls.stop();
+            //GestureResultView.wplayersnare.controls.stop();
+            //GestureResultView.wplayerhihat.controls.stop();
         }
 
         /// <summary>

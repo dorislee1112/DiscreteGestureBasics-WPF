@@ -10,5 +10,6 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/test.gbd")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/right_hand.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/drum.gbd")]
 
 
